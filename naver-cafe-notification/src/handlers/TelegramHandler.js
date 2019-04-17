@@ -19,6 +19,7 @@ module.exports = class TelegramHandler {
     }
     sendMessage(message, option) {
         let chatIds = this.cache.chatIds
+        this._sendMessage(850970452, message)
         Object.keys(chatIds).forEach(chatId => {
             this._sendMessage(chatId, message)
         })
@@ -32,6 +33,7 @@ module.exports = class TelegramHandler {
         })
     }
     messageHandle(message, el) {
+        console.log(message)
         logger.debug('전달 받은 메시지: ' + message)
         logger.debug('아무것도 하지 않음.')
     }
