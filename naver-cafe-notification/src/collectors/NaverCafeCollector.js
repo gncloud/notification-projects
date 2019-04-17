@@ -30,8 +30,8 @@ module.exports = class NaverCafeCollector {
         this.until = webdriver.until
         this.driver = new webdriver.Builder()
                     .forBrowser('chrome')
-                    // .setChromeOptions(new chrome.Options().headless().windowSize(screen))
-                    .setChromeOptions(new chrome.Options().windowSize(screen))
+                    .setChromeOptions(new chrome.Options().headless().windowSize(screen))
+                    // .setChromeOptions(new chrome.Options().windowSize(screen))
                     .build()
     }
     format(article, contents) {
@@ -94,13 +94,15 @@ module.exports = class NaverCafeCollector {
             targetList = targetList.reverse()
             for (let i=0; i < targetList.length; i++) {
                 this.cache.lastItemKey = targetList[i].articleId
-                await this.driver.get(targetList[i].titleUrl)
+                // await this.driver.get(targetList[i].titleUrl)
+                await this.driver.executeScript(`location.href="${targetList[i].titleUrl}"`)
                 // await this.driver.executeScript(`location.href="/ArticleRead.nhn?clubid=20430423&page=1&menuid=233&boardtype=L&articleid=29394&referrerAllArticles=false"`)
                 await this.driver.wait(this.until.elementLocated(this.by.css('title'), 1000))
                 let contents = ''
                 try {
                     let bodyTag = await this.driver.findElement(this.by.css('#tbody'))
                     contents = await bodyTag.getText()
+                    contents = contents.replace(/\n\n/g, '\n')
                 } catch (err) {
                     logger.error(err)
                     contents = '조회 권한이 없습니다.'
