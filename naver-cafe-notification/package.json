@@ -1,0 +1,25 @@
+{
+  "name": "notification-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "gncloud",
+  "license": "ISC",
+  "dependencies": {
+    "chromedriver": "^2.46.0",
+    "fs": "0.0.1-security",
+    "jsonfile": "^5.0.0",
+    "moment": "^2.24.0",
+    "node-telegram-bot-api": "^0.30.0",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7",
+    "selenium-webdriver": "^4.0.0-alpha.1",
+    "url-search-params": "^1.1.0",
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^3.8.0"
+  }
+}
