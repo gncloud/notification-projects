@@ -34,7 +34,10 @@ module.exports = class TelegramHandler {
     }
     messageHandle(message, el) {
         console.log(message)
-        logger.debug('전달 받은 메시지: ' + message)
+        if(message.text == '/whoami') {
+            el._sendMessage(message.chat.id, message)
+        }
+        logger.debug('전달 받은 메시지: ' + JSON.stringify(message))
         logger.debug('아무것도 하지 않음.')
     }
 }
