@@ -30,14 +30,14 @@ module.exports = class NaverCafeCollector {
         this.until = webdriver.until
         this.driver = new webdriver.Builder()
                     .forBrowser('chrome')
-                    .setChromeOptions(new chrome.Options().headless().windowSize(screen))
-                    // .setChromeOptions(new chrome.Options().windowSize(screen))
+                    // .setChromeOptions(new chrome.Options().headless().windowSize(screen))
+                    .setChromeOptions(new chrome.Options().windowSize(screen))
                     .build()
     }
-    format(article, contents) {
-        return `[${article.menuText}] ${article.titleText}\n\n`
-             + `${contents}\n\n`
-             + `${article.titleUrl}`
+    format(article) {
+        return `제목: ${article.titleText}\n`
+             + `작성자: ${article.nickName}\n`
+             + `링크: https://cafe.naver.com/ric01/${article.articleId}`
     }
     async run() {
         let targetList = []
@@ -60,18 +60,22 @@ module.exports = class NaverCafeCollector {
             await this.driver.wait(this.until.elementLocated(this.by.css('title'), 1000))
             await this.driver.switchTo().frame('cafe_main')
             
-            let articleList = await this.driver.findElements(this.by.css('#main-area > div:nth-child(4) > table > tbody > tr > td.td_article'))
+            let articleList = await this.driver.findElements(this.by.css('#main-area > div:nth-child(4) > table > tbody > tr'))
             for (let i=0; i < articleList.length; i++) {
+                let article = await articleList[i].findElement(this.by.className('td_article'))
 
-                let menuTag = await articleList[i].findElement(this.by.css('.link_name'))
+                let menuTag = await article.findElement(this.by.css('.link_name'))
                 let menuText = await menuTag.getText()
                 let menuUrl = await menuTag.getAttribute('href')
                 let menuId = this.getPram(menuUrl, 'search.menuid')
                 
-                let titleTag = await articleList[i].findElement(this.by.css('.article'))
+                let titleTag = await article.findElement(this.by.css('.article'))
                 let titleText = await titleTag.getText()
                 let titleUrl = await titleTag.getAttribute('href')
                 let articleId = this.getPram(titleUrl, 'articleid')
+
+                let nickTag = await articleList[i].findElement(this.by.css('.td_name .m-tcol-c'))
+                let nickName = await nickTag.getText()
 
                 if (!config.collectors.naver.cafe.ric01.menuIds.includes(Number(menuId))) {
                     continue
@@ -80,34 +84,33 @@ module.exports = class NaverCafeCollector {
                     break
                 }
                 
-                logger.debug('메뉴아이디: ' + menuId +', 메뉴이름:' + menuText + ', 제목: ' + titleText + ', 아이디: ' + articleId + ', 링크: ' + titleUrl)
+                logger.debug('메뉴아이디: ' + menuId +', 작성자:' + nickName + ', 제목: ' + titleText + ', 아이디: ' + articleId + ', 링크: ' + titleUrl)
 
                 targetList.push({
                     menuId: menuId,
                     menuText: menuText,
                     titleText: titleText,
                     titleUrl: titleUrl,
-                    articleId: articleId
+                    articleId: articleId,
+                    nickName: nickName
                 })
             }
             
             targetList = targetList.reverse()
             for (let i=0; i < targetList.length; i++) {
                 this.cache.lastItemKey = targetList[i].articleId
-                // await this.driver.get(targetList[i].titleUrl)
-                await this.driver.executeScript(`location.href="${targetList[i].titleUrl}"`)
-                // await this.driver.executeScript(`location.href="/ArticleRead.nhn?clubid=20430423&page=1&menuid=233&boardtype=L&articleid=29394&referrerAllArticles=false"`)
-                await this.driver.wait(this.until.elementLocated(this.by.css('title'), 1000))
-                let contents = ''
-                try {
-                    let bodyTag = await this.driver.findElement(this.by.css('#tbody'))
-                    contents = await bodyTag.getText()
-                    contents = contents.replace(/\n\n/g, '\n')
-                } catch (err) {
-                    logger.error(err)
-                    contents = '조회 권한이 없습니다.'
-                }
-                let message = this.format(targetList[i], contents)
+                // await this.driver.executeScript(`location.href="${targetList[i].titleUrl}"`)
+                // await this.driver.wait(this.until.elementLocated(this.by.css('title'), 1000))
+                // let contents = ''
+                // try {
+                //     let bodyTag = await this.driver.findElement(this.by.css('#tbody'))
+                //     contents = await bodyTag.getText()
+                //     contents = contents.replace(/\n\n/g, '\n')
+                // } catch (err) {
+                //     logger.error(err)
+                //     contents = '조회 권한이 없습니다.'
+                // }
+                let message = this.format(targetList[i])
                 MessageQueue.offer('telegram', message)
             }
             
@@ -117,7 +120,7 @@ module.exports = class NaverCafeCollector {
             logger.error(e)
         } finally {
             // await driver.quit()
-            setTimeout(() => { this.run() }, 5000)
+            setTimeout(() => { this.run() }, 30000)
         }
     }
     async isLoginCheck() {
@@ -152,7 +155,7 @@ module.exports = class NaverCafeCollector {
                 isLogin = false
             }
         }
-        logger.debug('로그인 상태:' + isLogin)
+        // logger.debug('로그인 상태:' + isLogin)
         return isLogin
     }
     async naverLogin() {
