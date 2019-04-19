@@ -7,6 +7,10 @@
     "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gncloud/node-manager.git"
+  },
   "author": "gncloud",
   "license": "ISC",
   "dependencies": {
@@ -14,6 +18,7 @@
     "fs": "0.0.1-security",
     "jsonfile": "^5.0.0",
     "moment": "^2.24.0",
+    "node-manager": "0.0.5",
     "node-telegram-bot-api": "^0.30.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",

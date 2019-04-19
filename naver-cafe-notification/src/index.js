@@ -4,8 +4,8 @@ const NotificationScheduler = require('./NotificationScheduler')
 const Collectors = require('./collectors')
 const jsonfile = require('jsonfile')
 
-const homePath = __dirname.substring(0, __dirname.indexOf('src') - 1)
-const config = jsonfile.readFileSync(homePath + '/config.json')
+const sourcePath = __dirname.substring(0, __dirname.indexOf('src') - 1)
+const config = jsonfile.readFileSync(sourcePath + '/config.json')
 
 class NotificationServer {
     constructor() {
@@ -28,9 +28,16 @@ class NotificationServer {
     }
 }
 
+(async () => {
+    logger.info('봇 시작')
+    new NotificationServer().listen()    
+})()
+logger.info('노드매니저 시작')
+const homePath = __dirname.substring(0, __dirname.indexOf('naver-cafe-notification') - 1)
+let restartShellPath = homePath + '/naver-cafe-notification/restart.sh'
+let configPath = homePath + '/naver-cafe-notification/config.json'
+logger.info('재시작 스크립트: ' + restartShellPath)
+logger.info('재시작 스크립트: ' + configPath)
+const NodeManager = require('node-manager')
+new NodeManager(restartShellPath, configPath).listen()
 
-logger.info('봇 시작')
-new NotificationServer().listen()
-
-// const NodeManager = require('node-manager')
-// new NodeManager().listen()
