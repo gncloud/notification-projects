@@ -64,6 +64,7 @@ module.exports = class MessageHandler {
         cache.keywords.forEach((keyword, index) => {
             if (params.trim() == keyword) {
                 cache.keywords.splice(index, 1)
+                delete cache.lastItemKey[keyword]
                 return false
             }
         })

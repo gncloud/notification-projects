@@ -19,7 +19,9 @@ module.exports = class TelegramHandler {
     }
     sendMessage(message, option) {
         if (option !== undefined && option.chatId !== undefined) {
-            this.bot.sendMessage(option.chatId, message)
+            this.bot.sendMessage(option.chatId, message, {
+                disable_web_page_preview: true
+            })
                 .then(m => {
                     delete this.removeCount[chatId]
                 })
@@ -32,7 +34,9 @@ module.exports = class TelegramHandler {
         } else {
             let chatIds = this.cache.chatIds
             Object.keys(chatIds).forEach(chatId => {
-                this.bot.sendMessage(chatId, message)
+                this.bot.sendMessage(chatId, message, {
+                    disable_web_page_preview: true
+                })
                     .then(m => {
                         delete this.removeCount[chatId]
                     })
