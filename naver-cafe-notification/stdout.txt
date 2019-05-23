@@ -1,0 +1,5 @@
+{"message":"봇 시작","level":"info","timestamp":"2019-04-19 12:30:19"}
+{"message":"네이버카페 게시판 수집","level":"debug","timestamp":"2019-04-19 12:30:19"}
+{"message":"노드매니저 시작","level":"info","timestamp":"2019-04-19 12:30:19"}
+{"message":"재시작 스크립트: /Users/joonwookim/Projects/notification-projects/naver-cafe-notification/restart.sh","level":"info","timestamp":"2019-04-19 12:30:19"}
+{"message":"재시작 스크립트: /Users/joonwookim/Projects/notification-projects/naver-cafe-notification/config.json","level":"info","timestamp":"2019-04-19 12:30:19"}
