@@ -1,8 +1,7 @@
 module.exports = {
     login: 'admin',
     telegram: {
-        token: '804080512:AAFUIgNaPubGQVcA5npeWj_xWW9fBl6qG1g',
-        chatId: ''
+        token: '804080512:AAFUIgNaPubGQVcA5npeWj_xWW9fBl6qG1g'
     },
     collectors: {
         naverNews: {

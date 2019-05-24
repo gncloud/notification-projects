@@ -58,6 +58,10 @@ module.exports = class NaverNewsCollector {
                 logger.debug("전송할 뉴스 갯수:" + messages.size)
                 if (messages.size > 0) {
                     messages.forEach(message => {
+                        message = message.replace(/(<([^>])+)>/gi, '')
+                                         .replace(/(&lt;)/ig, '<')
+                                         .replace(/(&gt;)+/gi, '>')
+                                         .replace(/(&quot;)+/,'"')
                         logger.debug(message)
                         MessageQueue.offer('telegram', message)
                     })

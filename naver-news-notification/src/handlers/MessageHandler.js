@@ -79,5 +79,30 @@ module.exports = class MessageHandler {
         let cache = CacheMananger.getCache('naverNews')
         this.telegramHandler.bot.sendMessage(message.chat.id, `등록된 갯수: ${cache.keywords.length} \n키워드: ${cache.keywords}`)
     }
+    help(message, params) {
+        let text = `
+사용방법.
+1. 로그인하기
+     로그인을해야지 알림을 받을수 있습니다.
+     예제)
+     /login 비밀번호입력하세요.
+2. 키워드 등록
+     add 명령어와 한칸띄어쓰기 후 검색 키워드입력
+     여러건의 등록은 콤바로 구분합니다.
+   예제) 
+     /add 펭귄
+     또는
+     /add 펭귄, 퀴즈
+3. 키워드 삭제
+     del 명령어와 한칸띄어쓰기 후 검색 키워드입력
+   예제)
+     /del 펭귄
+4. 등록된 키워드 조회
+     현재 등록된 키워드를 확인할려면 get 명령어를 사용
+   예제)
+     /get
+`
+        this.telegramHandler.bot.sendMessage(message.chat.id, text)
+    }
 }
 
