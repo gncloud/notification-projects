@@ -42,14 +42,16 @@ module.exports = class NaverNewsCollector {
                     qs: {
                         query: keyword,
                         display: this.config.display,
-                        sort: 'date'
+                        // sort: 'date'
                     }
                 }))
                 const items = res.items.reverse()
                 items.forEach(item => {
                     let key = new Date(item.pubDate).getTime()
-                    if (lastItemkeys[keyword] === undefined 
-                        || lastItemkeys[keyword] < key) {
+                    if (lastItemkeys[keyword] === undefined) {
+                        // 최초 키워드 등록시 대량 메시지 전송을 막기위해 최신등록.
+                        lastItemkeys[keyword] = key
+                    } else if (lastItemkeys[keyword] < key) {
                         lastItemkeys[keyword] = key
                         let message = item.title + '\n' + item.originallink
                         messages.add(message)

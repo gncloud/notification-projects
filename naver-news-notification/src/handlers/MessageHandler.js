@@ -101,7 +101,8 @@ module.exports = class MessageHandler {
      현재 등록된 키워드를 확인할려면 get 명령어를 사용
    예제)
      /get
-`
+5. 도움말이 필요하시면 /help를 입력하세요.
+     `
         this.telegramHandler.bot.sendMessage(message.chat.id, text)
     }
 }
