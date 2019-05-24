@@ -136,28 +136,38 @@ class DartTelegramServer {
         items.reverse().forEach(item => {
             // 채널대화는 봇이 채널에 관리자로 추가되어있는 상태에서 채널아이디로 메시지 전달
             // this.bot.sendMessage([채널아이디], format.formatItem(item))
+            let isSend = false
             Object.keys(this.chatFilters)
-                .forEach(chatId => {
-                    if (this.chatFilters[chatId].length == 0) {
-                        // 등록된 필터가 없으면 전부 전송.
-                        this.send(chatId, format.formatItem(item))
-                        return false
-                    } else {
-                        this.chatFilters[chatId].forEach(filter => {
-                            let title = item['title']['_text']
-                            if (title.indexOf(filter) != -1) {
-                                this.send(chatId, format.formatItem(item))
-                                return false
-                            }
-                        })
-                    }
-                });
+            .forEach(chatId => {
+                if (isSend) {
+                    logger.debug('메시지당 1회 전송 제한합니다.')
+                    return false
+                }
+                if (this.chatFilters[chatId].length == 0) {
+                    // 등록된 필터가 없으면 전부 전송.
+                    this.send(chatId, format.formatItem(item))
+                    isSend = true
+                    return false
+                } else {
+                    this.chatFilters[chatId].forEach(filter => {
+                        let title = item['title']['_text']
+                        if (title.indexOf(filter) != -1) {
+                            this.send(chatId, format.formatItem(item))
+                            isSend = true
+                            return false
+                        }
+                    })
+                }   
+            });
         })
     }
 
     async rssReader() {
         try {
-            if (Object.keys(this.chatFilters).length > 0) {
+            if (this.chatFilters !== undefined && 
+                this.chatFilters !== null &&
+                this.chatFilters !== '' &&
+                Object.keys(this.chatFilters).length > 0) {
                 let response = await request(this.rssUrl)
                 let rssJson = utils.parseXmlToJson(response)
                 let items = rssJson['rss']['channel']['item']
