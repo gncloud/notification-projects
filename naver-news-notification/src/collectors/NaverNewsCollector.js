@@ -25,8 +25,8 @@ module.exports = class NaverNewsCollector {
             keywords = []
             this.cache.keywords = keywords
             CacheMananger.setCache(this.cacheId, this.cache)
-            return false
         }
+        logger.debug('수집 시작. 검색할 키워드 수 ' + keywords.length)
         try {
             let lastItemkeys = this.cache.lastItemKey
             let messages = new Set()
@@ -75,7 +75,8 @@ module.exports = class NaverNewsCollector {
         } catch(err) {
             logger.error('naver news request failed', err)
         } finally {
-            setTimeout(() => { this.run() }, 5 * 60 * 1000)
+            // setTimeout(() => { this.run() }, 5 * 60 * 1000)
+            setTimeout(() => { this.run() }, 6000)
         }
     }
 }
