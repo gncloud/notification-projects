@@ -77,7 +77,7 @@ module.exports = class NaverNewsCollector {
         } catch(err) {
             logger.error('naver news request failed', err)
         } finally {
-            setTimeout(() => { this.run() }, 5 * 60 * 1000)
+            setTimeout(() => { this.run() }, 1 * 60 * 1000)
         }
     }
 }
