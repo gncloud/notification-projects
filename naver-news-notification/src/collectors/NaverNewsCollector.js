@@ -55,15 +55,14 @@ module.exports = class NaverNewsCollector {
                 // console.log("-----------------------------------------")
                 // console.log(res.items)
                 console.log("=====================================================================")
-                console.log(payload)
+                // console.log(payload)
                 const items = res.items.reverse()
                 let found = false
-                logger.info("------ ["+keyword + "] 검색 시작.마지막 뉴스 수집시각: "
-                    + new Date(lastItemkeys[keyword]) + "------")
+                logger.info("------ ["+keyword + "] 검색시작. 마지막 뉴스: " + new Date(lastItemkeys[keyword]) + "------")
 
                 if(items.length > 0) {
                     let item = items[items.length-1]
-                    logger.debug("  >> Check [" + keyword + "] " + item.pubDate + " > " + item.title)
+                    logger.debug(">>LAST [" + keyword + "] " + item.pubDate + " > " + item.title)
                 }
                 items.forEach(item => {                    
                     let key = new Date(item.pubDate).getTime()
