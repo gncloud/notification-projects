@@ -52,9 +52,9 @@ module.exports = class MessageHandler {
             }
             cache.keywords.push(keyword.trim())
         })
-        logger.debug('변경된 키워드 >> ', cache.keywords)
         CacheMananger.setCache('naverNews', cache)
-        this.telegramHandler.bot.sendMessage(message.chat.id, '검색 키워드 추가되었습니다.')
+        this.telegramHandler.bot.sendMessage(message.chat.id, '키워드가 추가되었습니다.\n'+
+        `등록된 갯수: ${cache.keywords.length} \n키워드: ${cache.keywords}`)
     }
     del(message, params) {
         if (!this._isAuthentication(message)) {
@@ -68,9 +68,9 @@ module.exports = class MessageHandler {
                 return false
             }
         })
-        logger.debug('변경된 키워드 >> ', cache.keywords)
         CacheMananger.setCache('naverNews', cache)
-        this.telegramHandler.bot.sendMessage(message.chat.id, '검색 키워드 삭제되었습니다.')
+        this.telegramHandler.bot.sendMessage(message.chat.id, '키워드가 삭제되었습니다.\n'+
+        `등록된 갯수: ${cache.keywords.length} \n키워드: ${cache.keywords}`)
     }
     get(message, params) {
         if (!this._isAuthentication(message)) {

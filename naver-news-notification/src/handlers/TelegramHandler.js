@@ -81,8 +81,12 @@ module.exports = class TelegramHandler {
             if (action.startsWith('/')) {
                 action = action.substring(1)
                 params = message.text.substring(message.text.indexOf(" ") == -1 ? message.text.length : message.text.indexOf(" "))
+                if(action in this.messageHandler) {
+                    this.messageHandler[action](message, params)
+                }
             }
-            this.messageHandler[action](message, params)
+            
+            
         } catch(e) {
             logger.error("알수없는 액션", e)
         }
