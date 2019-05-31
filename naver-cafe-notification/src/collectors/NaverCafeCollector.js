@@ -34,9 +34,9 @@ module.exports = class NaverCafeCollector {
         o.addArguments('disable-dev-shm-usage');
         this.driver = new webdriver.Builder()
                     .forBrowser('chrome')
-                    .setChromeOptions(o)
+                    // .setChromeOptions(o)
                     // .setChromeOptions(new chrome.Options().headless().windowSize(screen))
-                    // .setChromeOptions(new chrome.Options().windowSize(screen))
+                    .setChromeOptions(new chrome.Options().windowSize(screen))
                     .build()
     }
     format(article) {
@@ -64,8 +64,9 @@ module.exports = class NaverCafeCollector {
             await this.driver.get('https://cafe.naver.com/ArticleList.nhn?search.clubid=20430423&search.boardtype=L&search.menuid=&search.questionTab=A&search.marketBoardTab=D&search.specialmenutype=&userDisplay=50')
             await this.driver.wait(this.until.elementLocated(this.by.css('title'), 1000))
             await this.driver.switchTo().frame('cafe_main')
-            
+            logger.debug('카페 메인진입')
             let articleList = await this.driver.findElements(this.by.css('#main-area > div:nth-child(4) > table > tbody > tr'))
+            logger.debug('아티클 체크 ' + articleList.length + " 개..")
             for (let i=0; i < articleList.length; i++) {
                 let article = await articleList[i].findElement(this.by.className('td_article'))
 
@@ -78,6 +79,7 @@ module.exports = class NaverCafeCollector {
                 let titleText = await titleTag.getText()
                 let titleUrl = await titleTag.getAttribute('href')
                 let articleId = this.getPram(titleUrl, 'articleid')
+                // logger.debug('아티클 체크 ' + articleId)
 
                 let nickTag = await articleList[i].findElement(this.by.css('.td_name .m-tcol-c'))
                 let nickName = await nickTag.getText()
@@ -100,7 +102,7 @@ module.exports = class NaverCafeCollector {
                     nickName: nickName
                 })
             }
-            
+            logger.debug('전송할 아티클 ' + targetList.length + " 개..")
             targetList = targetList.reverse()
             for (let i=0; i < targetList.length; i++) {
                 this.cache.lastItemKey = targetList[i].articleId
@@ -118,7 +120,7 @@ module.exports = class NaverCafeCollector {
                 let message = this.format(targetList[i])
                 MessageQueue.offer('telegram', message)
             }
-            
+            logger.debug('완료!')
             CacheMananger.setCache(this.cacheId, this.cache)
             
         } catch(e) {
@@ -177,8 +179,10 @@ module.exports = class NaverCafeCollector {
             await this.driver.executeScript(`document.getElementById('id').value="${id}"`)
             await this.driver.executeScript(`document.getElementById('pw').value="${pw}"`)
             await (await this.driver.findElement(this.by.id('pw'))).sendKeys(key.Key.ENTER)
+            logger.debug('로그인 성공')
         } catch(err) {
             logger.error(err)
+            logger.debug('로그인 실패')
         }
     }
     getPram(url, key) {
