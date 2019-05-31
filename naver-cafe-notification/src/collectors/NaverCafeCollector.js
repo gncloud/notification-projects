@@ -34,9 +34,9 @@ module.exports = class NaverCafeCollector {
         o.addArguments('disable-dev-shm-usage');
         this.driver = new webdriver.Builder()
                     .forBrowser('chrome')
-                    // .setChromeOptions(o)
+                    // .setChromeOptions(o)  //1. 리눅스 서버의 경우 이 옵션을 사용한다.
                     // .setChromeOptions(new chrome.Options().headless().windowSize(screen))
-                    .setChromeOptions(new chrome.Options().windowSize(screen))
+                    .setChromeOptions(new chrome.Options().windowSize(screen)) //2. macbook 개발환경에서는 이 옵션을 사용한다.
                     .build()
     }
     format(article) {
@@ -79,7 +79,6 @@ module.exports = class NaverCafeCollector {
                 let titleText = await titleTag.getText()
                 let titleUrl = await titleTag.getAttribute('href')
                 let articleId = this.getPram(titleUrl, 'articleid')
-                // logger.debug('아티클 체크 ' + articleId)
 
                 let nickTag = await articleList[i].findElement(this.by.css('.td_name .m-tcol-c'))
                 let nickName = await nickTag.getText()
