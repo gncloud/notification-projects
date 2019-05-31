@@ -6,3 +6,4 @@ logs/
 .idea/
 src/cache/
 logs/
+*.tmp
