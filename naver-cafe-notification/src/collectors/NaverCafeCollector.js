@@ -28,10 +28,15 @@ module.exports = class NaverCafeCollector {
         logger.debug('네이버카페 게시판 수집')
         this.by = webdriver.By
         this.until = webdriver.until
+        let o = new chrome.Options();
+        o.addArguments('headless');
+        o.addArguments('no-sandbox');
+        o.addArguments('disable-dev-shm-usage');
         this.driver = new webdriver.Builder()
                     .forBrowser('chrome')
+                    .setChromeOptions(o)
                     // .setChromeOptions(new chrome.Options().headless().windowSize(screen))
-                    .setChromeOptions(new chrome.Options().windowSize(screen))
+                    // .setChromeOptions(new chrome.Options().windowSize(screen))
                     .build()
     }
     format(article) {

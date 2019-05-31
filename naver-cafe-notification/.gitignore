@@ -4,3 +4,5 @@ package-lock.json
 config.json
 logs/
 .idea/
+src/cache/
+logs/
