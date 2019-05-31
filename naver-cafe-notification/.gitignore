@@ -3,3 +3,4 @@ cache/*.cache
 package-lock.json
 config.json
 logs/
+.idea/

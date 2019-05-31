@@ -12,7 +12,7 @@ class CacheManager {
     }
     setCache(id, cache) {
         let cacheFilePath = this.checkCacheFile(id)
-        fs.writeFileSync(cacheFilePath, JSON.stringify(cache))
+        fs.writeFileSync(cacheFilePath, JSON.stringify(cache, null, 2))
     }
     checkCacheFile(id) {
         let cacheFilePath = this.getCacheFilePath(id)
