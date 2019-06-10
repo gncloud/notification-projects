@@ -1,15 +1,15 @@
 {
     "messengers": {
         "telegram": {
-            "token": "829299574:AAFcRuGYPTsk604Ei3cUfl-hRtULiGy1G1A",
-            "chatId": "-1001158430636"
+            "token": "",
+            "chatId": ""
         }
     },
     "collectors": {
         "naver": {
             "login": {
-                "id": "gncloudkr",
-                "pw": "gnc=1151"
+                "id": "",
+                "pw": ""
             },
             "cafe": {
                 "ric01": {
