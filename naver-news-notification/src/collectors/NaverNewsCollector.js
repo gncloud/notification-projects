@@ -64,8 +64,10 @@ module.exports = class NaverNewsCollector {
                     let item = items[items.length-1]
                     logger.debug(">>LAST [" + keyword + "] " + item.pubDate + " > " + item.title)
                 }
-                items.forEach(item => {                    
-                    let key = new Date(item.pubDate).getTime()
+                items.forEach(item => {
+                    let pd = new Date(item.pubDate)
+                    let key = pd.getTime()
+                    let timeText = pd.getHours()+":"+pd.getMinutes()
                     if (lastItemkeys[keyword] === undefined) {
                         // 최초 키워드 등록시 대량 메시지 전송을 막기위해 최신등록.
                         lastItemkeys[keyword] = key
@@ -75,7 +77,7 @@ module.exports = class NaverNewsCollector {
                     //한번 신규 뉴스가 발견되면 그 이후는 더욱 최신시간이 되므로, found 변수를 도입하여 해결한다.
                     if (key > lastItemkeys[keyword] || found) {
                         lastItemkeys[keyword] = key
-                        let message = item.title + '\n' + item.originallink
+                        let message = item.title + ' [네이버 ' + timeText + ']\n' + item.originallink
                         messages.add(message)
                         found = true
                     }
