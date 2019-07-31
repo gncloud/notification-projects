@@ -65,7 +65,8 @@ module.exports = class NaverCafeCollector {
             await this.driver.wait(this.until.elementLocated(this.by.css('title'), 1000))
             await this.driver.switchTo().frame('cafe_main')
             logger.debug('카페 메인진입')
-            let articleList = await this.driver.findElements(this.by.css('#main-area > div:nth-child(4) > table > tbody > tr'))
+            /* 2019.7.31 갑자기 글 수집이 안되서 봤더니 div 사이에 <script>가 두개 추가됨. 즉, 네이버 화면에서 소스코드가 살짝 바뀌면 대응이 안되는 한계가 있음..*/
+            let articleList = await this.driver.findElements(this.by.css('#main-area > div:nth-child(6) > table > tbody > tr'))
             logger.debug('아티클 체크 ' + articleList.length + " 개..")
             for (let i=0; i < articleList.length; i++) {
                 let article = await articleList[i].findElement(this.by.className('td_article'))
