@@ -23,21 +23,25 @@ module.exports = class NaverCafeCollector {
         this.init()
         this.run()
     }
-    init() {
-        this.cache = CacheMananger.getCache(this.cacheId)
-        logger.debug('네이버카페 게시판 수집')
-        this.by = webdriver.By
-        this.until = webdriver.until
+    buildDriver() {
+        //고려사항: 추후에는 this.driver.quit()를 사용해서 쓰고 바로 버리는 방식도 좋을듯... try..catch..활용..
         let o = new chrome.Options();
         o.addArguments('headless');
         o.addArguments('no-sandbox');
         o.addArguments('disable-dev-shm-usage');
         this.driver = new webdriver.Builder()
-                    .forBrowser('chrome')
-                    // .setChromeOptions(o)  //1. 리눅스 서버의 경우 이 옵션을 사용한다.
-                    // .setChromeOptions(new chrome.Options().headless().windowSize(screen))
-                    .setChromeOptions(new chrome.Options().windowSize(screen)) //2. macbook 개발환경에서는 이 옵션을 사용한다.
-                    .build()
+            .forBrowser('chrome')
+            // .setChromeOptions(o)  //1. 리눅스 서버의 경우 이 옵션을 사용한다.
+            // .setChromeOptions(new chrome.Options().headless().windowSize(screen))
+            .setChromeOptions(new chrome.Options().windowSize(screen)) //2. macbook 개발환경에서는 이 옵션을 사용한다.
+            .build()
+    }
+    init() {
+        this.cache = CacheMananger.getCache(this.cacheId)
+        logger.debug('네이버카페 게시판 수집')
+        this.by = webdriver.By
+        this.until = webdriver.until
+        this.buildDriver();
     }
     format(article) {
         return `제목: ${article.titleText}\n`
@@ -125,6 +129,7 @@ module.exports = class NaverCafeCollector {
             
         } catch(e) {
             logger.error(e)
+            this.buildDriver();
         } finally {
             // await driver.quit()
             setTimeout(() => { this.run() }, 30000)
