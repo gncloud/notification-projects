@@ -129,6 +129,7 @@ module.exports = class NaverCafeCollector {
             
         } catch(e) {
             logger.error(e)
+            await this.driver.quit();
             this.buildDriver();
         } finally {
             // await driver.quit()
